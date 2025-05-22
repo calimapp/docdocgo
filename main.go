@@ -1,0 +1,28 @@
+package main
+
+import (
+	"flag"
+	"fmt"
+	"os"
+
+	"gitlab.gms.dev.lab/calimap/docdocgo/parser"
+)
+
+func main() {
+	if len(os.Args) < 2 {
+		fmt.Println("Usage: docdocgo <module-path>")
+		os.Exit(1)
+	}
+	modulePath := os.Args[1]
+
+	output := flag.String("output", "out.html", "--output <output-path>")
+	flag.Parse()
+
+	documentation, err := parser.ParseModule(modulePath)
+	if err != nil {
+		fmt.Println("Error generating doc:", err)
+		os.Exit(1)
+	}
+
+	documentation.ToHTML(*output)
+}
