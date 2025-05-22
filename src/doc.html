@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>DocDocGO</title>
+        <style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+}
+header {
+    top: 0; position: sticky; height: 7vh; padding: 0 20px;
+    background-color: #007d9c; color: white;
+    display: flex; align-items: center;
+}
+nav {
+    top: 7vh; position: sticky; overflow-y: auto;
+    height: calc(100vh - 7vh);
+    display: flex; flex-direction: column; row-gap: 0.5rem;
+    padding: 20px;
+    box-sizing: border-box;
+}
+.nav-title{
+    background-color: #f0eeee;
+    height: 2rem;
+    color: black;
+    text-decoration: none;
+    padding: auto;
+}
+main {
+    display: flex; flex-direction: column;
+    padding: 20px;
+    row-gap: 10px;
+}
+h1 {
+    font-size: 1.25rem;
+}
+.section-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+.section-title:hover {
+    cursor: pointer;
+}
+.package-section {
+    flex-direction: column;
+    display: flex;
+    row-gap: 10px;
+    margin-bottom: 50px;
+}
+.package-name {
+    color: #375eab;
+    font-size: 1.75rem;
+    font-weight: bold;
+}
+.package-ref {
+    padding-left: 20px;
+    font-family: Menlo, monospace;
+}
+.package-subsection {
+    background: #e0ebf5;
+    font-size: 1.25rem;
+    color: #375eab;
+    padding: 0.5rem;
+}
+.package-subsection:hover{
+    cursor: pointer;
+}
+.func-name, .type-name {
+    color:#375eab;
+    font-weight: bold;
+}
+.line {
+  width: 100%;
+  height: 0;
+  border-bottom: 1px solid black;
+  margin: 3px 0 6px 0;
+  display:inline-block;
+}
+        </style>
+    </head>
+    <body>
+        <header>
+            <h1>{{.Name}}</h1>
+        </header>
+        <div style="display: grid; grid-template-columns: 20% 80%; justify-items: stretch;">
+            <nav>
+                <a class="nav-title" href="#readme">README</a>
+                <a class="nav-title" href="#documentation">Documentation</a>
+                <a class="nav-title" href="#source-files">Source Files</a>
+                <a class="nav-title" href="#packages">Packages</a>
+            </nav>
+            <main>
+                <section id="readme">
+                    <details open="true">
+                        <summary>
+                            <span class="section-title">README</span>
+                            <div class="line"></div>
+                        </summary>
+                        <div>{{.Readme}}</div>
+                    </details>
+                </section>
+                <section id="documentation">
+                    <details open="true">
+                        <summary>
+                            <span class="section-title">Documentation</span>
+                            <div class="line"></div>
+                        </summary>
+                        <p>doc...</p>
+                    </details>
+                </section>
+                <section id="source-files">
+                    <details open="true">
+                        <summary>
+                            <span class="section-title">Source files</span>
+                            <div class="line"></div>
+                        </summary>
+                        {{range .SourceFiles}}
+                        <div>{{.}}</div>
+                        {{end}}
+                    </details>
+                </section>
+                <section id="packages">
+                    <details open="true">
+                        <summary>
+                            <span class="section-title">Packages</span>
+                            <div class="line"></div>
+                        </summary>
+                        <span>packages...</span>
+                    </details>
+                </section>
+            </main>
+        </div>
+
+        <!-- {{range .Packages}}
+        <div class="package-section">
+            <span class="package-name">Package {{.Name}}</span>
+            <span class="package-ref">import "{{.Ref}}"</span>
+
+            <details>
+                <summary class="package-subsection">Functions</summary>
+                {{range .Functions}}
+                <div class="func">
+                    <span class="func-name">func {{.Name}}</span>
+                    <span class="func-code"></span>
+                </div>
+                {{end}}
+            </details>
+
+            <details>
+                <summary class="package-subsection">Types</summary>
+                {{range .Types}}
+                <div class="type">
+                    <span class="type-name">type {{.Name}}</span>
+                    <span class="func-code"></span>
+                <div>
+                {{end}}
+            </details>
+        </div>
+        {{end}} -->
+    </body>
+</html>

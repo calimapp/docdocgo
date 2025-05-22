@@ -49,7 +49,7 @@ func parsePackageTypes(pkgDocumentation *doc.Package) []goType {
 }
 
 func (m *goModule) ToHTML(outputPath string) error {
-	tmpl, err := template.ParseFiles("templates/doc.html")
+	tmpl, err := template.ParseFiles("src/doc.html")
 	if err != nil {
 		return err
 	}
