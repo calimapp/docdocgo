@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"html/template"
+	"io/fs"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -34,38 +35,38 @@ func ParseModule(modulePath string) (*goModule, error) {
 		SourceFiles:   getSourceFiles(modulePath),
 	}
 
-	// err = filepath.Walk(modulePath, func(path string, info fs.FileInfo, err error) error {
-	// 	if err != nil {
-	// 		return err
-	// 	}
+	err = filepath.Walk(modulePath, func(path string, info fs.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
 
-	// 	if !info.IsDir() {
-	// 		return nil
-	// 	}
+		if !info.IsDir() {
+			return nil
+		}
 
-	// 	files, err := os.ReadDir(path)
-	// 	if err != nil {
-	// 		return err
-	// 	}
+		files, err := os.ReadDir(path)
+		if err != nil {
+			return err
+		}
 
-	// 	hasGoFiles := false
-	// 	for _, file := range files {
-	// 		if filepath.Ext(file.Name()) == ".go" {
-	// 			hasGoFiles = true
-	// 			break
-	// 		}
-	// 	}
+		hasGoFiles := false
+		for _, file := range files {
+			if filepath.Ext(file.Name()) == ".go" {
+				hasGoFiles = true
+				break
+			}
+		}
 
-	// 	if !hasGoFiles {
-	// 		return nil
-	// 	}
-	// 	pkg, err := parsePackage(path)
-	// 	if err != nil {
-	// 		return err
-	// 	}
-	// 	moduleDoc.Packages = append(moduleDoc.Packages, *pkg)
-	// 	return nil
-	// })
+		if !hasGoFiles {
+			return nil
+		}
+		pkg, err := parsePackage(path)
+		if err != nil {
+			return err
+		}
+		moduleDoc.Packages = append(moduleDoc.Packages, *pkg)
+		return nil
+	})
 	return moduleDoc, err
 }
 

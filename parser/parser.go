@@ -56,18 +56,19 @@ func parsePackage(packagePath string) (*goPackage, error) {
 func parsePackageFunctions(pkgDocumentation *doc.Package) []goFunction {
 	goFunctions := []goFunction{}
 	for _, fn := range pkgDocumentation.Funcs {
+		println(fn.Name)
 		// parse params
 		args := make([]valueTypePair, 0)
 		if fn.Decl.Type.Params != nil {
 			for _, field := range fn.Decl.Type.Params.List {
-				args = append(args, valueTypePair{Name: field.Names[0].Name, Type: field.Type.(*ast.Ident).Name})
+				args = append(args, valueTypePair{Name: field.Names[0].Name, Type: astTypeToString(field.Type)})
 			}
 		}
 		// parse return
 		results := make([]valueTypePair, 0)
 		if fn.Decl.Type.Results != nil {
 			for _, field := range fn.Decl.Type.Results.List {
-				results = append(results, valueTypePair{Type: field.Type.(*ast.Ident).Name})
+				results = append(results, valueTypePair{Type: astTypeToString(field.Type)})
 			}
 		}
 		goFunctions = append(goFunctions, goFunction{Name: fn.Name, Doc: fn.Doc, Arguments: args, Results: results})
@@ -85,7 +86,7 @@ func parsePackageTypes(pkgDocumentation *doc.Package) []goType {
 		case *ast.StructType:
 			typeType = "struct"
 			for _, field := range t.Fields.List {
-				fields = append(fields, valueTypePair{Name: field.Names[0].Name, Type: field.Type.(*ast.Ident).Name})
+				fields = append(fields, valueTypePair{Name: field.Names[0].Name, Type: astTypeToString(field.Type)})
 			}
 		case *ast.InterfaceType:
 			typeType = "interface"
