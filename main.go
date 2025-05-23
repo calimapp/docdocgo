@@ -1,3 +1,4 @@
+// DocDocGO is a golang documentation generator
 package main
 
 import (

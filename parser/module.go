@@ -22,19 +22,17 @@ func ParseModule(modulePath string) (*goModule, error) {
 		return nil, err
 	}
 
+	doc, err := getPackageDocumentation(modulePath)
+	if err != nil {
+		return nil, err
+	}
 	moduleDoc := &goModule{
 		Name:          moduleName,
-		Documentation: "TO DO module doc",
+		Documentation: *doc,
 		Packages:      make([]goPackage, 0),
 		Readme:        *moduleReadme,
 		SourceFiles:   getSourceFiles(modulePath),
 	}
-
-	// pkg, err := parsePackage(moduleName)
-	// if err != nil {
-	// 	return nil, err
-	// }
-	// moduleDoc.Packages = append(moduleDoc.Packages, *pkg)
 
 	// err = filepath.Walk(modulePath, func(path string, info fs.FileInfo, err error) error {
 	// 	if err != nil {

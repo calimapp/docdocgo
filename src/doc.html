@@ -16,13 +16,11 @@ header {
 nav {
     top: 7vh; position: sticky; overflow-y: auto;
     height: calc(100vh - 7vh);
-    display: flex; flex-direction: column; row-gap: 0.5rem;
+    display: flex; flex-direction: column; row-gap: 1rem;
     padding: 20px;
     box-sizing: border-box;
 }
 .nav-title{
-    background-color: #f0eeee;
-    height: 2rem;
     color: black;
     text-decoration: none;
     padding: auto;
@@ -39,7 +37,13 @@ h1 {
     font-size: 1.25rem;
     font-weight: bold;
 }
-.section-title:hover {
+.section-subtitle {
+    font-size: 1rem;
+    font-weight: bold;
+    background-color: #bfeaf4;
+    padding: 5px;
+}
+summary:hover {
     cursor: pointer;
 }
 .package-section {
@@ -77,6 +81,30 @@ h1 {
   margin: 3px 0 6px 0;
   display:inline-block;
 }
+.code-block {
+    background-color: black;
+    color: rgb(236, 236, 236);
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+.code-comment {
+    color: #6a9956;
+}
+.code-keyword {
+    color: #569cd6
+}
+.code-type {
+    color: #4dc9b0;
+}
+.code-var {
+    color: #9cdcfd;
+}
+.code-func {
+    color: #dbdba9;
+}
+.main-color {
+    color: #007d9c
+}
         </style>
     </head>
     <body>
@@ -92,7 +120,7 @@ h1 {
             </nav>
             <main>
                 <section id="readme">
-                    <details open="true">
+                    <details>
                         <summary>
                             <span class="section-title">README</span>
                             <div class="line"></div>
@@ -101,27 +129,116 @@ h1 {
                     </details>
                 </section>
                 <section id="documentation">
-                    <details open="true">
+                    <details open>
                         <summary>
                             <span class="section-title">Documentation</span>
                             <div class="line"></div>
                         </summary>
-                        <p>doc...</p>
+                        <h3 class="section-subtitle">Overview</h3>
+                        {{if .Documentation.Overview}}
+                            <p>{{.Documentation.Overview}}</p>
+                        {{else}}
+                            <p>This section is empty.</p>
+                        {{end}}
+
+                        <h3 class="section-subtitle">Constants</h3>
+                        {{if len .Documentation.Constants}}
+                        {{range .Documentation.Constants}}
+                        <p class="code-block">
+                            <code>
+                                {{if .Doc}}<span class="code-comment">// {{.Doc}}</span><br>{{end}}
+                                <span class="code-keyword">const</span>
+                                <span class="code-var">{{.Name}} </span>
+                                <span class="code-type">{{.Type}}</span> = {{.Value}}
+                            </code>
+                        </p>
+                        {{end}}
+                        {{else}}
+                            <p>This section is empty.</p>
+                        {{end}}
+
+                        <!-- Variables -->
+                        <h3 class="section-subtitle">Variables</h3>
+                        {{if len .Documentation.Variables}}
+                        {{range .Documentation.Variables}}
+                        <p class="code-block">
+                            <code>
+                                {{if .Doc}}<span class="code-comment">// {{.Doc}}</span><br>{{end}}
+                                <span class="code-keyword">var</span>
+                                <span class="code-var">{{.Name}}</span>
+                                <span class="code-type">{{.Type}}</span> = {{.Value}}
+                            </code>
+                        </p>
+                        {{end}}
+                        {{else}}
+                            <p>This section is empty.</p>
+                        {{end}}
+
+                        <!-- Functions -->
+                        <h3 class="section-subtitle">Functions</h3>
+                        {{if len .Documentation.Functions}}
+                            {{range .Documentation.Functions}}
+                            <span><b>func</b> <b class="main-color">{{.Name}}</b></span>
+                            <p class="code-block">
+                                <code>
+                                    {{if .Doc}}<span class="code-comment">// {{.Doc}}</span><br>{{end}}
+                                    <span class="code-keyword">func</span>
+                                    <span class="code-func">{{.Name}}</span>(
+                                    {{range .Arguments}}
+                                    <span class="code-var">{{.Name}}</span>
+                                    <span class="code-type">{{.Type}}</span>
+                                    {{end}})
+                                    {{range .Results}}
+                                    {{if .Name}}<span class="code-type">{{.Name}}</span>{{end}}
+                                    <span class="code-var">{{.Type}}</span>
+                                    {{end}}
+                                </code>
+                            </p>
+                            {{end}}
+                        {{else}}
+                            <p>This section is empty.</p>
+                        {{end}}
+
+                        <!-- Types -->
+                        <h3 class="section-subtitle">Types</h3>
+                        {{if len .Documentation.Types}}
+                            {{range .Documentation.Types}}
+                            <span>type {{.Name}}</span>
+                            <p class="code-block">
+                                <code>
+                                    {{if .Doc}}<span class="code-comment">// {{.Doc}}</span><br>{{end}}
+                                    <span class="code-keyword">type</span>
+                                    <span class="code-type">{{.Name}}</span>
+                                    <span class="code-keyword">{{.Type}}</span>
+                                    {{if .Fields }}{<br>
+                                        {{range .Fields}}
+                                        &nbsp;&nbsp;
+                                        <span class="code-var">{{.Name}}</span>
+                                        <span class="code-type">{{.Type}}</span>
+                                        <br>
+                                        {{end}}
+                                    }{{end}}
+                                </code>
+                            </p>
+                            {{end}}
+                        {{else}}
+                            <p>This section is empty.</p>
+                        {{end}}
                     </details>
                 </section>
                 <section id="source-files">
-                    <details open="true">
+                    <details>
                         <summary>
                             <span class="section-title">Source files</span>
                             <div class="line"></div>
                         </summary>
                         {{range .SourceFiles}}
-                        <div>{{.}}</div>
+                        <div >{{.}}</div>
                         {{end}}
                     </details>
                 </section>
                 <section id="packages">
-                    <details open="true">
+                    <details>
                         <summary>
                             <span class="section-title">Packages</span>
                             <div class="line"></div>
