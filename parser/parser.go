@@ -56,7 +56,6 @@ func parsePackage(packagePath string) (*goPackage, error) {
 func parsePackageFunctions(pkgDocumentation *doc.Package) []goFunction {
 	goFunctions := []goFunction{}
 	for _, fn := range pkgDocumentation.Funcs {
-		println(fn.Name)
 		// parse params
 		args := make([]valueTypePair, 0)
 		if fn.Decl.Type.Params != nil {
@@ -133,12 +132,15 @@ func parsePackageVariables(pkgDocumentation *doc.Package) []goVar {
 }
 
 func (m *goModule) ToHTML(outputPath string) error {
-	tmpl, err := template.ParseFiles("src/doc.html")
+	tmpl, err := template.ParseGlob("src/*")
 	if err != nil {
 		return err
 	}
-	outputFile, _ := os.Create(outputPath)
-	return tmpl.Execute(outputFile, m)
+	outputFile, err := os.Create(outputPath)
+	if err != nil {
+		return err
+	}
+	return tmpl.ExecuteTemplate(outputFile, "index.html", m)
 }
 
 // return .go sources files of a given directory
