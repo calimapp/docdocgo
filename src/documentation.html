@@ -50,17 +50,18 @@
             <code>
                 {{if .Doc}}<span class="code-comment">// {{.Doc}}</span><br>{{end}}
                 <span class="code-keyword">func</span>
-                <span class="code-func">{{ .Name }}</span>
-                ({{- range .Arguments}}
+                <span class="code-func">{{ .Name }} (</span>
+                {{- range .Arguments -}}
                 <span class="code-var">{{ .Name }}</span>
                 <span class="code-type">{{ .Type }}</span>
-                {{- end}})
+                {{- end }})
                 {{range .Results}}
-                {{if .Name}}<span class="code-type">{{.Name}}</span>{{end}}
-                <span class="code-var">{{.Type}}</span>
+                {{if .Name}}<span class="code-var">{{.Name}}</span>{{end}}
+                <span class="code-type">{{.Type}}</span>
                 {{end}}
             </code>
         </p>
+        <p>{{.Doc}}</p>
         {{end}}
     {{else}}
         <p style="color: #737374">This section is empty.</p>
