@@ -1,0 +1,49 @@
+{{ define "nav" }}
+<nav>
+    <a class="nav-title" aria-expanded="false" aria-controls="nav-documentation" href="#documentation">Documentation</a>
+    <div class="expandable" hidden>
+        TEST
+    </div>
+    <a class="nav-title" href="#source-files">Source Files</a>
+    <div class="nav-item">
+        <a class="nav-title" href="#packages">Packages</a>
+        {{ if len .Packages }}
+        <div class="sub-nav">
+            {{ range .Packages }}
+            <a class="nav-subtitle" href="#{{.Ref}}">└─ <span style="color: #007d9c;">{{.Ref}}</span></a>
+            {{ end }}
+        </div>
+    </div>
+    {{ end }}
+    <a class="nav-title" href="#readme">README</a>
+</nav>
+
+<style>
+nav {
+    top: 7vh; position: sticky; overflow-y: auto;
+    height: calc(100vh - 7vh);
+    display: flex; flex-direction: column; row-gap: 1rem;
+    padding: 20px;
+    box-sizing: border-box;
+}
+.nav-title{
+    font-size: 1.1rem;
+    color: black;
+    text-decoration: none;
+    border-radius: 10px;
+}
+.sub-nav {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    row-gap: 2px;
+}
+.nav-subtitle {
+    text-decoration: none;
+    color: black;
+}
+.nav-subtitle:hover {
+    cursor: pointer;
+}
+</style>
+{{ end }}

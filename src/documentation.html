@@ -4,7 +4,7 @@
     {{ if .Overview }}
     <p>{{ .Overview }}</p>
     {{ else }}
-    <p>This section is empty.</p>
+    <p style="color: #737374">This section is empty.</p>
     {{ end }}
 
     <!-- Constants -->
@@ -21,7 +21,7 @@
     </p>
     {{end}}
     {{else}}
-        <p>This section is empty.</p>
+        <p style="color: #737374">This section is empty.</p>
     {{end}}
 
     <!-- Variables -->
@@ -38,7 +38,7 @@
     </p>
     {{end}}
     {{else}}
-        <p>This section is empty.</p>
+        <p style="color: #737374">This section is empty.</p>
     {{end}}
 
     <!-- Functions -->
@@ -50,10 +50,10 @@
             <code>
                 {{if .Doc}}<span class="code-comment">// {{.Doc}}</span><br>{{end}}
                 <span class="code-keyword">func</span>
-                <span class="code-func">{{.Name}}</span>(
-                {{- range .Arguments}}
-                <span class="code-var">{{.Name}}</span>
-                <span class="code-type">{{.Type}}</span>
+                <span class="code-func">{{ .Name }}</span>
+                ({{- range .Arguments}}
+                <span class="code-var">{{ .Name }}</span>
+                <span class="code-type">{{ .Type }}</span>
                 {{- end}})
                 {{range .Results}}
                 {{if .Name}}<span class="code-type">{{.Name}}</span>{{end}}
@@ -63,7 +63,7 @@
         </p>
         {{end}}
     {{else}}
-        <p>This section is empty.</p>
+        <p style="color: #737374">This section is empty.</p>
     {{end}}
 
     <!-- Types -->
@@ -89,7 +89,7 @@
         </p>
         {{end}}
     {{else}}
-        <p>This section is empty.</p>
+        <p style="color: #737374">This section is empty.</p>
     {{end}}
 </section>
 {{ end }}

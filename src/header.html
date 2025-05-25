@@ -1,5 +1,21 @@
 {{ define "header" }}
 <header>
-    <h1>{{.Name}}</h1>
+    <div class="header-right">
+        <h1>{{.Name}}</h1>
+    </div>
+    <div class="header-right">
+        {{ if .Version }}<span>Version: {{.Version}}</span><span>|</span>{{ end }}
+        {{ if .Date }}<span>Published: {{.Date}}</span><span>|</span>{{ end }}
+        {{ if .License }} <span>License: {{.License}}</span>{{ end }}
+    </div>
 </header>
+<style>
+    header {
+        justify-content: space-between;
+    }
+    .header-right {
+        display: flex;
+        column-gap: 20px;
+    }
+</style>
 {{ end }}

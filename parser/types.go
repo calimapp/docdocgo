@@ -38,15 +38,16 @@ type goDocumentation struct {
 }
 
 type goPackage struct {
-	Name      string
-	Ref       string
-	Doc       string
-	Functions []goFunction
-	Types     []goType
+	Name          string
+	Ref           string
+	Documentation goDocumentation
 }
 
 type goModule struct {
 	Name          string
+	Version       string
+	Date          string
+	License       string
 	Readme        template.HTML
 	Documentation goDocumentation
 	Packages      []goPackage

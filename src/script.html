@@ -1,0 +1,15 @@
+{{ define "script" }}
+<script>
+    const navItems = document.querySelectorAll(".action-collapse")
+    navItems.forEach(item => {
+        item.addEventListener('click', function() {
+            const expanded = this.getAttribute('aria-expanded') === 'true';
+            this.setAttribute('aria-expanded', !expanded);
+            let section = this.nextElementSibling;
+            if (section.classList.contains('collapsable')) {
+                section.hidden = expanded;
+            }
+        })
+    })
+</script>
+{{ end }}

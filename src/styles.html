@@ -1,37 +1,40 @@
 {{define "style"}}
 <style>
 body {
-    font-family: Arial, sans-serif;
+    font-family: system-ui, 'Segoe UI', 'Open Sans', 'Helvetica Neue', sans-serif;
     margin: 0;
 }
 header {
     top: 0; position: sticky; height: 7vh; padding: 0 20px;
     background-color: #007d9c; color: white;
     display: flex; align-items: center;
-}
-nav {
-    top: 7vh; position: sticky; overflow-y: auto;
-    height: calc(100vh - 7vh);
-    display: flex; flex-direction: column; row-gap: 1rem;
-    padding: 20px;
-    box-sizing: border-box;
-}
-.nav-title{
-    color: black;
-    text-decoration: none;
-    padding: auto;
+    z-index: 3;
 }
 main {
     display: flex; flex-direction: column;
-    padding: 20px;
-    row-gap: 10px;
+    row-gap: 1rem;
 }
 h1 {
-    font-size: 1.25rem;
+    font-size: 1.15rem;
 }
 .section-title {
-    font-size: 1.25rem;
-    font-weight: bold;
+    margin: 0;
+    padding: 20px 0 0 0;
+    width: 100%;
+    font-size: 1.375rem;
+    font-weight: 600;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgb(198, 200, 202);
+    position: sticky;
+    top: 7vh;
+    z-index: 2;
+    background-color: white;
+}
+details > summary {
+  list-style: none;
+}
+details > summary::-webkit-details-marker {
+  display: none;
 }
 .section-subtitle {
     font-size: 1rem;
@@ -99,7 +102,7 @@ summary:hover {
     color: #dbdba9;
 }
 .main-color {
-    color: #007d9c
+    color: #007d9c;
 }
 </style>
 {{end}}

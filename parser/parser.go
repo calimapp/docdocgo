@@ -41,13 +41,11 @@ func parsePackage(packagePath string) (*goPackage, error) {
 
 	for _, astPkg := range astPkgs {
 		pkgDoc := doc.New(astPkg, packagePath, doc.AllDecls)
-
+		doc, _ := getPackageDocumentation(packagePath)
 		return &goPackage{
-			Name:      pkgDoc.Name,
-			Doc:       pkgDoc.Doc,
-			Ref:       pkgDoc.ImportPath,
-			Functions: parsePackageFunctions(pkgDoc),
-			Types:     parsePackageTypes(pkgDoc),
+			Name:          pkgDoc.Name,
+			Ref:           pkgDoc.ImportPath,
+			Documentation: *doc,
 		}, nil
 	}
 	return nil, fmt.Errorf("no packages found at %s", packagePath)

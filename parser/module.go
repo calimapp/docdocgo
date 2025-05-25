@@ -8,6 +8,7 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"time"
 
 	"github.com/yuin/goldmark"
 )
@@ -29,6 +30,9 @@ func ParseModule(modulePath string) (*goModule, error) {
 	}
 	moduleDoc := &goModule{
 		Name:          moduleName,
+		Version:       "X.X.X",
+		Date:          time.Now().Format(time.DateOnly),
+		License:       "MIT",
 		Documentation: *doc,
 		Packages:      make([]goPackage, 0),
 		Readme:        *moduleReadme,
@@ -40,7 +44,7 @@ func ParseModule(modulePath string) (*goModule, error) {
 			return err
 		}
 
-		if !info.IsDir() {
+		if !info.IsDir() || path == modulePath {
 			return nil
 		}
 

@@ -25,5 +25,8 @@ func main() {
 		os.Exit(1)
 	}
 
-	documentation.ToHTML(*output)
+	if err = documentation.ToHTML(*output); err != nil {
+		fmt.Println("Error rendering doc html template:", err)
+		os.Exit(1)
+	}
 }
