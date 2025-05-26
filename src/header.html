@@ -4,9 +4,9 @@
         <h1>{{.Name}}</h1>
     </div>
     <div class="header-right">
-        {{ if .Version }}<span>Version: {{.Version}}</span><span>|</span>{{ end }}
-        {{ if .Date }}<span>Published: {{.Date}}</span><span>|</span>{{ end }}
-        {{ if .License }} <span>License: {{.License}}</span>{{ end }}
+        {{ if .Version }}<span>Version: {{.Version}}</span>{{ end }}
+        {{ if .Date }}<span>|</span><span>Published: {{.Date}}</span>{{ end }}
+        {{ if .License }}<span>|</span><span>License: {{.License}}</span>{{ end }}
     </div>
 </header>
 <style>

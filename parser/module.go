@@ -2,9 +2,11 @@ package parser
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"html/template"
 	"io/fs"
+	"net/http"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -35,11 +37,16 @@ func ParseModule(modulePath string) (*goModule, error) {
 		return nil, err
 	}
 
+	moduleVersion, err := getVersion(moduleName)
+	if err != nil {
+		moduleVersion.Time = time.Now()
+		moduleVersion.Version = ""
+	}
+
 	module := &goModule{
 		Name:          moduleName,
-		Version:       "X.X.X",
-		Date:          time.Now().Format(time.DateOnly),
-		License:       "MIT",
+		Version:       moduleVersion.Version,
+		Date:          moduleVersion.Time.Format(time.DateOnly),
 		Documentation: *moduleDoc,
 		Packages:      make([]goPackage, 0),
 		Readme:        *moduleReadme,
@@ -111,6 +118,30 @@ func getModuleReadme(modulePath string) (*template.HTML, error) {
 	}
 	html := template.HTML(readmeHtml.String())
 	return &html, nil
+}
+
+type moduleVersion struct {
+	Version string    `json:"Version"`
+	Time    time.Time `json:"Time"`
+}
+
+func getVersion(moduleRef string) (*moduleVersion, error) {
+	url := fmt.Sprintf("https://proxy.golang.org/%s/@latest", moduleRef)
+	resp, err := http.Get(url)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		panic("module not found: " + resp.Status)
+	}
+
+	var mv moduleVersion
+	if err := json.NewDecoder(resp.Body).Decode(&mv); err != nil {
+		return nil, fmt.Errorf("decoding failed: %w", err)
+	}
+	return &mv, nil
 }
 
 type Dependency struct {

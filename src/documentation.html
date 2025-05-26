@@ -33,7 +33,7 @@
             {{if .Doc}}<span class="code-comment">// {{.Doc}}</span><br>{{end}}
             <span class="code-keyword">var</span>
             <span class="code-var">{{.Name}}</span>
-            <span class="code-type">{{.Type}}</span> = {{.Value}}
+            <span class="code-type">{{.Type}}</span> {{if .Value }}= {{.Value}}{{end}}
         </code>
     </p>
     {{end}}
