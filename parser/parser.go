@@ -6,7 +6,6 @@ import (
 	"go/doc"
 	"go/parser"
 	"go/token"
-	"html/template"
 	"os"
 	"path/filepath"
 )
@@ -126,9 +125,13 @@ func parsePackageVariables(pkgDocumentation *doc.Package) []goVar {
 	vars := make([]goVar, 0)
 	for _, v := range pkgDocumentation.Vars {
 		for _, spec := range v.Decl.Specs {
+			var value string
+			if len(spec.(*ast.ValueSpec).Values) > 0 {
+				value = spec.(*ast.ValueSpec).Values[0].(*ast.BasicLit).Value
+			}
 			goVar := goVar{
 				Name:  spec.(*ast.ValueSpec).Names[0].Name,
-				Value: spec.(*ast.ValueSpec).Values[0].(*ast.BasicLit).Value,
+				Value: value,
 				Type:  astTypeToString(spec.(*ast.ValueSpec).Type),
 				Doc:   spec.(*ast.ValueSpec).Doc.Text(),
 			}
@@ -136,18 +139,6 @@ func parsePackageVariables(pkgDocumentation *doc.Package) []goVar {
 		}
 	}
 	return vars
-}
-
-func (m *goModule) ToHTML(outputPath string) error {
-	tmpl, err := template.ParseGlob("src/*")
-	if err != nil {
-		return err
-	}
-	outputFile, err := os.Create(outputPath)
-	if err != nil {
-		return err
-	}
-	return tmpl.ExecuteTemplate(outputFile, "index.html", m)
 }
 
 // return .go sources files of a given directory
