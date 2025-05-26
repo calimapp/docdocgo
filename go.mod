@@ -1,4 +1,4 @@
-module gitlab.gms.dev.lab/calimap/docdocgo
+module github.com/calimapp/docdocgo
 
 go 1.24
 
