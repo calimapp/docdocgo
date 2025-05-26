@@ -1,6 +1,6 @@
 {{ define "documentation" }}
 <section class="documentation">
-    <h3 class="section-subtitle">Overview</h3>
+    <h3 class="section-subtitle" id="{{.Ref}}-overview">Overview</h3>
     {{ if .Overview }}
     <p>{{ .Overview }}</p>
     {{ else }}
@@ -8,7 +8,7 @@
     {{ end }}
 
     <!-- Constants -->
-    <h3 class="section-subtitle">Constants</h3>
+    <h3 class="section-subtitle" id="{{.Ref}}-constants">Constants</h3>
     {{if len .Constants}}
     {{range .Constants}}
     <p class="code-block">
@@ -25,7 +25,7 @@
     {{end}}
 
     <!-- Variables -->
-    <h3 class="section-subtitle">Variables</h3>
+    <h3 class="section-subtitle" id="{{.Ref}}-variables">Variables</h3>
     {{if len .Variables}}
     {{range .Variables}}
     <p class="code-block">
@@ -42,7 +42,7 @@
     {{end}}
 
     <!-- Functions -->
-    <h3 class="section-subtitle">Functions</h3>
+    <h3 class="section-subtitle" id="{{.Ref}}-functions">Functions</h3>
     {{if len .Functions}}
         {{range .Functions}}
         <span><b>func</b> <b class="main-color">{{.Name}}</b></span>
@@ -50,7 +50,7 @@
             <code>
                 {{if .Doc}}<span class="code-comment">// {{.Doc}}</span><br>{{end}}
                 <span class="code-keyword">func</span>
-                <span class="code-func">{{ .Name }} (</span>
+                <span class="code-func">{{ .Name }}(</span>
                 {{- range .Arguments -}}
                 <span class="code-var">{{ .Name }}</span>
                 <span class="code-type">{{ .Type }}</span>
@@ -61,20 +61,19 @@
                 {{end}}
             </code>
         </p>
-        <p>{{.Doc}}</p>
+        {{if .Doc}}<p>{{.Doc}}</p>{{end}}
         {{end}}
     {{else}}
         <p style="color: #737374">This section is empty.</p>
     {{end}}
 
     <!-- Types -->
-    <h3 class="section-subtitle">Types</h3>
+    <h3 class="section-subtitle" id="{{.Ref}}-types">Types</h3>
     {{if len .Types}}
         {{range .Types}}
-        <span>type {{.Name}}</span>
+        <span><b>type</b> <b class="main-color">{{.Name}}</b></span>
         <p class="code-block">
             <code>
-                {{if .Doc}}<span class="code-comment">// {{.Doc}}</span><br>{{end}}
                 <span class="code-keyword">type</span>
                 <span class="code-type">{{.Name}}</span>
                 <span class="code-keyword">{{.Type}}</span>
@@ -88,6 +87,7 @@
                 }{{end}}
             </code>
         </p>
+        {{if .Doc}}<p>{{.Doc}}</p>{{end}}
         {{end}}
     {{else}}
         <p style="color: #737374">This section is empty.</p>

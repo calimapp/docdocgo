@@ -9,6 +9,18 @@ import (
 	"gitlab.gms.dev.lab/calimap/docdocgo/parser"
 )
 
+var (
+	varA string = ""
+	//test
+	varB = ""
+)
+
+const (
+	a string = ""
+	//test
+	b = ""
+)
+
 func main() {
 	if len(os.Args) < 2 {
 		fmt.Println("Usage: docdocgo <module-path>")

@@ -20,7 +20,12 @@ func getPackageDocumentation(packagePath string) (*goDocumentation, error) {
 	}
 	for _, astPkg := range astPkgs {
 		pkgDoc := doc.New(astPkg, packagePath, doc.AllDecls)
+		ref := pkgDoc.ImportPath
+		if ref == "." {
+			ref = "module"
+		}
 		return &goDocumentation{
+			Ref:       ref,
 			Overview:  pkgDoc.Doc,
 			Constants: parsePackageConstants(pkgDoc),
 			Variables: parsePackageVariables(pkgDoc),
@@ -103,13 +108,15 @@ func parsePackageTypes(pkgDocumentation *doc.Package) []goType {
 func parsePackageConstants(pkgDocumentation *doc.Package) []goVar {
 	consts := make([]goVar, 0)
 	for _, cst := range pkgDocumentation.Consts {
-		goConst := goVar{
-			Name:  cst.Names[0],
-			Value: cst.Decl.Specs[0].(*ast.ValueSpec).Values[0].(*ast.BasicLit).Value,
-			Type:  cst.Decl.Specs[0].(*ast.ValueSpec).Type.(*ast.Ident).Name,
-			Doc:   cst.Doc,
+		for _, spec := range cst.Decl.Specs {
+			goConst := goVar{
+				Name:  spec.(*ast.ValueSpec).Names[0].Name,
+				Value: spec.(*ast.ValueSpec).Values[0].(*ast.BasicLit).Value,
+				Type:  astTypeToString(spec.(*ast.ValueSpec).Type),
+				Doc:   spec.(*ast.ValueSpec).Doc.Text(),
+			}
+			consts = append(consts, goConst)
 		}
-		consts = append(consts, goConst)
 	}
 	return consts
 }
@@ -118,13 +125,15 @@ func parsePackageConstants(pkgDocumentation *doc.Package) []goVar {
 func parsePackageVariables(pkgDocumentation *doc.Package) []goVar {
 	vars := make([]goVar, 0)
 	for _, v := range pkgDocumentation.Vars {
-		goVar := goVar{
-			Name:  v.Names[0],
-			Value: v.Decl.Specs[0].(*ast.ValueSpec).Values[0].(*ast.BasicLit).Value,
-			Type:  v.Decl.Specs[0].(*ast.ValueSpec).Type.(*ast.Ident).Name,
-			Doc:   v.Doc,
+		for _, spec := range v.Decl.Specs {
+			goVar := goVar{
+				Name:  spec.(*ast.ValueSpec).Names[0].Name,
+				Value: spec.(*ast.ValueSpec).Values[0].(*ast.BasicLit).Value,
+				Type:  astTypeToString(spec.(*ast.ValueSpec).Type),
+				Doc:   spec.(*ast.ValueSpec).Doc.Text(),
+			}
+			vars = append(vars, goVar)
 		}
-		vars = append(vars, goVar)
 	}
 	return vars
 }

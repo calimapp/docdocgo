@@ -30,6 +30,7 @@ type goVar struct {
 }
 
 type goDocumentation struct {
+	Ref       string
 	Overview  string
 	Constants []goVar
 	Variables []goVar

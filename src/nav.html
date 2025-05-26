@@ -1,8 +1,14 @@
 {{ define "nav" }}
 <nav>
-    <a class="nav-title" aria-expanded="false" aria-controls="nav-documentation" href="#documentation">Documentation</a>
-    <div class="expandable" hidden>
-        TEST
+    <div class="nav-item">
+        <a class="nav-title" href="#documentation">Documentation</a>
+        <div class="sub-nav">
+            <a class="nav-subtitle" href="#module-overview">Overview</a>
+            <a class="nav-subtitle" href="#module-constants">Constants</a>
+            <a class="nav-subtitle" href="#module-variables">Variables</a>
+            <a class="nav-subtitle" href="#module-functions">Functions</a>
+            <a class="nav-subtitle" href="#module-types">Types</a>
+        </div>
     </div>
     <a class="nav-title" href="#source-files">Source Files</a>
     <div class="nav-item">
@@ -10,7 +16,9 @@
         {{ if len .Packages }}
         <div class="sub-nav">
             {{ range .Packages }}
-            <a class="nav-subtitle" href="#{{.Ref}}">└─ <span style="color: #007d9c;">{{.Ref}}</span></a>
+            <a class="nav-subtitle" style="margin-left: 0;" href="#{{.Ref}}">
+                └─ <span style="color: #007d9c;">{{.Ref}}</span>
+            </a>
             {{ end }}
         </div>
     </div>
@@ -36,11 +44,13 @@ nav {
     margin-top: 10px;
     display: flex;
     flex-direction: column;
-    row-gap: 2px;
+    row-gap: 3px;
 }
 .nav-subtitle {
     text-decoration: none;
-    color: black;
+    color: #6E7072;
+    font-size: 0.9rem;
+    margin-left: 20px;
 }
 .nav-subtitle:hover {
     cursor: pointer;
