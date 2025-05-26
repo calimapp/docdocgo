@@ -24,7 +24,7 @@
                     <h2 class="section-title">Packages</h2>
                     {{ range .Packages }}
                     <section class="package-section" id="{{.Ref}}">
-                        <span class="package-title"><b>package</b> <b class="main-color">{{.Ref}}</b></span>
+                        <h3 class="package-title"><b>package</b> <b class="main-color">{{.Ref}}</b></h3>
                         {{ template "documentation" .Documentation }}
                     </section>
                     {{ end }}
