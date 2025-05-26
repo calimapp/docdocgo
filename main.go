@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"os"
 
-	"gitlab.gms.dev.lab/calimap/docdocgo/parser"
+	"github.com/calimapp/docdocgo/parser"
 )
 
 //go:embed src/*
