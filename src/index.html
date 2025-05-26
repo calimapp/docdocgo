@@ -29,6 +29,20 @@
                     </section>
                     {{ end }}
                 </section>
+                <section id="dependencies">
+                    <h2 class="section-title">Dependencies</h2>
+                    <section class="dependencies-section">
+                        {{ if len .Dependencies }}
+                        <ul>
+                            {{ range .Dependencies }}
+                            <li>{{.Path}} {{.Version}}</li>
+                            {{ end }}
+                        </ul>
+                        {{ else }}
+                        <p>No dependencies</p>
+                        {{ end }}
+                    </section>
+                </section>
                 <section id="readme">
                     <h2 class="section-title">README</h2>
                     <div>{{.Readme}}</div>

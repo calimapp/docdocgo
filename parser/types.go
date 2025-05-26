@@ -53,4 +53,5 @@ type goModule struct {
 	Documentation goDocumentation
 	Packages      []goPackage
 	SourceFiles   []string
+	Dependencies  []Dependency
 }

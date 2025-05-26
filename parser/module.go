@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/yuin/goldmark"
+	"golang.org/x/mod/modfile"
 )
 
 func ParseModule(modulePath string) (*goModule, error) {
@@ -24,19 +25,26 @@ func ParseModule(modulePath string) (*goModule, error) {
 		return nil, err
 	}
 
-	doc, err := getPackageDocumentation(modulePath)
+	moduleDoc, err := getPackageDocumentation(modulePath)
 	if err != nil {
 		return nil, err
 	}
-	moduleDoc := &goModule{
+
+	moduleDependencies, err := getModuleDependencies(modulePath)
+	if err != nil {
+		return nil, err
+	}
+
+	module := &goModule{
 		Name:          moduleName,
 		Version:       "X.X.X",
 		Date:          time.Now().Format(time.DateOnly),
 		License:       "MIT",
-		Documentation: *doc,
+		Documentation: *moduleDoc,
 		Packages:      make([]goPackage, 0),
 		Readme:        *moduleReadme,
 		SourceFiles:   getSourceFiles(modulePath),
+		Dependencies:  moduleDependencies,
 	}
 
 	err = filepath.Walk(modulePath, func(path string, info fs.FileInfo, err error) error {
@@ -68,10 +76,10 @@ func ParseModule(modulePath string) (*goModule, error) {
 		if err != nil {
 			return err
 		}
-		moduleDoc.Packages = append(moduleDoc.Packages, *pkg)
+		module.Packages = append(module.Packages, *pkg)
 		return nil
 	})
-	return moduleDoc, err
+	return module, err
 }
 
 func getModuleName(modulePath string) (string, error) {
@@ -103,4 +111,31 @@ func getModuleReadme(modulePath string) (*template.HTML, error) {
 	}
 	html := template.HTML(readmeHtml.String())
 	return &html, nil
+}
+
+type Dependency struct {
+	Path     string `json:"Path"`
+	Version  string `json:"Version"`
+	Indirect bool   `json:"Indirect"`
+}
+
+func getModuleDependencies(modulePath string) ([]Dependency, error) {
+	data, err := os.ReadFile(filepath.Join(modulePath, "go.mod"))
+	if err != nil {
+		return nil, fmt.Errorf("failed to read go.mod file: %w", err)
+	}
+	gomod, err := modfile.Parse("go.mod", data, nil)
+
+	if err != nil {
+		return nil, fmt.Errorf("failed to parse go.mod file: %w", err)
+	}
+	var dependencies []Dependency
+	for _, dep := range gomod.Require {
+		dependencies = append(dependencies, Dependency{
+			Path:     dep.Mod.Path,
+			Version:  dep.Mod.Version,
+			Indirect: dep.Indirect,
+		})
+	}
+	return dependencies, nil
 }
