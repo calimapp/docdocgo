@@ -127,7 +127,7 @@ func parsePackageVariables(pkgDocumentation *doc.Package) []goVar {
 		for _, spec := range v.Decl.Specs {
 			var value string
 			if len(spec.(*ast.ValueSpec).Values) > 0 {
-				value = spec.(*ast.ValueSpec).Values[0].(*ast.BasicLit).Value
+				value = astValueToString(spec.(*ast.ValueSpec).Values[0])
 			}
 			goVar := goVar{
 				Name:  spec.(*ast.ValueSpec).Names[0].Name,

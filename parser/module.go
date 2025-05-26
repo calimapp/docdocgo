@@ -48,6 +48,7 @@ func ParseModule(modulePath string) (*goModule, error) {
 		Version:       moduleVersion.Version,
 		Date:          moduleVersion.Time.Format(time.DateOnly),
 		Documentation: *moduleDoc,
+		License:       resolveLicense(modulePath),
 		Packages:      make([]goPackage, 0),
 		Readme:        *moduleReadme,
 		SourceFiles:   getSourceFiles(modulePath),

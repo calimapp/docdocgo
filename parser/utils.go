@@ -41,6 +41,21 @@ func astTypeToString(value ast.Expr) string {
 	}
 }
 
+func astValueToString(value ast.Expr) string {
+	switch t := value.(type) {
+	case *ast.BasicLit:
+		return t.Value
+	case *ast.CompositeLit:
+		var values string
+		for _, elt := range t.Elts {
+			values += " " + astValueToString(elt)
+		}
+		return values
+	default:
+		return ""
+	}
+}
+
 func paramsToString(fields *ast.FieldList) string {
 	var params []string
 	if fields == nil {
