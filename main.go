@@ -20,9 +20,14 @@ func main() {
 	}
 	modulePath := os.Args[1]
 
-	flag.Boo("help")
+	help := flag.Bool("help", false, "--help")
 	output := flag.String("output", "out.html", "--output <output-path>")
 	flag.Parse()
+
+	if *help {
+		fmt.Println("Usage: docdocgo <module-path> --output <output-file>")
+		os.Exit(0)
+	}
 
 	documentation, err := parser.ParseModule(modulePath)
 	if err != nil {
