@@ -108,9 +108,13 @@ func parsePackageConstants(pkgDocumentation *doc.Package) []goVar {
 	consts := make([]goVar, 0)
 	for _, cst := range pkgDocumentation.Consts {
 		for _, spec := range cst.Decl.Specs {
+			var value string
+			if len(spec.(*ast.ValueSpec).Values) > 0 {
+				value = astValueToString(spec.(*ast.ValueSpec).Values[0])
+			}
 			goConst := goVar{
 				Name:  spec.(*ast.ValueSpec).Names[0].Name,
-				Value: spec.(*ast.ValueSpec).Values[0].(*ast.BasicLit).Value,
+				Value: value,
 				Type:  astTypeToString(spec.(*ast.ValueSpec).Type),
 				Doc:   spec.(*ast.ValueSpec).Doc.Text(),
 			}
