@@ -3,44 +3,47 @@ package main
 
 import (
 	"embed"
-	"flag"
 	"fmt"
-	"os"
 
 	"github.com/calimapp/docdocgo/parser"
+	"github.com/spf13/cobra"
 )
 
 //go:embed src/*
 var templates embed.FS
 
+var (
+	output     string
+	modVersion string
+
+	cmd = &cobra.Command{
+		Use:   "docdocgo <module-path>",
+		Short: "A golang documentation generator",
+		Long:  "Docdocgo render a golang documentation in a single html file",
+		Args:  cobra.ExactArgs(1),
+		RunE:  run,
+	}
+)
+
 func main() {
-	if len(os.Args) < 2 {
-		fmt.Println("Usage: docdocgo <module-path> --output <output-file>")
-		os.Exit(1)
-	}
-	modulePath := os.Args[1]
+	cmd.Flags().StringVarP(&output, "output", "o", "out.html", "html output filepath")
+	cmd.Flags().StringVar(&modVersion, "mod-version", "", "manually set module version")
+	cmd.Execute()
+}
 
-	help := flag.Bool("help", false, "--help")
-	output := flag.String("output", "out.html", "--output <output-path>")
-	version := flag.String("version", "", "--version <module-version>")
-	flag.Parse()
-
-	if *help {
-		fmt.Println("Usage: docdocgo <module-path> --output <output-file>")
-		os.Exit(0)
-	}
+func run(cmd *cobra.Command, args []string) error {
+	modulePath := args[0]
 
 	documentation, err := parser.ParseModule(modulePath)
 	if err != nil {
-		fmt.Println("Error generating doc:", err)
-		os.Exit(1)
+		return fmt.Errorf("error generating doc: %w", err)
 	}
-	if documentation.Version == "" {
-		documentation.Version = *version
+	if modVersion != "" {
+		documentation.Version = modVersion
 	}
 
-	if err = documentation.ToHTML(templates, *output); err != nil {
-		fmt.Println("Error rendering doc html template:", err)
-		os.Exit(1)
+	if err = documentation.ToHTML(templates, output); err != nil {
+		return fmt.Errorf("error rendering doc html: %w", err)
 	}
+	return nil
 }

@@ -13,6 +13,10 @@ var licenseFileNames []string = []string{
 	"LICENSE", "LICENSE.md", "LICENSE.markdown", "LICENSE.txt", "LICENSE-2.0.txt", "MIT-LICENSE",
 }
 
+// Search for a known license filename in root folder of modulePath,
+// then use google/licensecheck to find license name.
+//
+// Return "None" if no license found.
 func resolveLicense(modulePath string) string {
 	for _, name := range licenseFileNames {
 		fullPath := filepath.Join(modulePath, name)
@@ -23,7 +27,6 @@ func resolveLicense(modulePath string) string {
 
 		// Try to detect the license type
 		result := licensecheck.Scan(data)
-
 		if result.Match != nil {
 			return result.Match[0].ID
 		}
