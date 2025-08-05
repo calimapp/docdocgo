@@ -14,11 +14,13 @@ go install github.com/calimapp/docdocgo@latest
 
 ## Features
 
+### High priority
+- [ ] Dockerize CLI, with auto docker deployment to docker hub
+- [ ] Refactor app in 2 separate modules parser and render
+
+### Low priority
+
 - [ ] switch display internal packages and private functions, vars, ...
+- [ ] Generate documentation in other format (pdf, markdown, asciidoc, ...)
+- [ ] Templates management for html (maybe for other format)
 - [ ] Split package doc in different html files ?
-- [ ] Implement version, license, date
-- [ ] Generate documentation in other format (markdown, asciidoc, ...)
-- [ ]
-- [ ]
-- [ ]
-- [ ]
