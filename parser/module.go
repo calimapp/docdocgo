@@ -109,6 +109,11 @@ func getModuleName(modulePath string) (string, error) {
 // getModuleReadme return the README.md file if exists or nil otherwise
 func getModuleReadme(modulePath string) (*template.HTML, error) {
 	readmePath := filepath.Join(modulePath, "README.md")
+	// Check if the file exists
+	if _, err := os.Stat(readmePath); os.IsNotExist(err) {
+		html := template.HTML("")
+		return &html, nil
+	}
 	readmeContent, err := os.ReadFile(readmePath)
 	if err != nil {
 		return nil, err
@@ -127,20 +132,16 @@ type moduleVersion struct {
 }
 
 func getVersion(moduleRef string) (*moduleVersion, error) {
+	var mv moduleVersion
 	url := fmt.Sprintf("https://proxy.golang.org/%s/@latest", moduleRef)
 	resp, err := http.Get(url)
-	if err != nil {
-		return nil, err
+	if err != nil || resp == nil {
+		return &mv, err
 	}
 	defer resp.Body.Close()
 
-	if resp.StatusCode != http.StatusOK {
-		panic("module not found: " + resp.Status)
-	}
-
-	var mv moduleVersion
 	if err := json.NewDecoder(resp.Body).Decode(&mv); err != nil {
-		return nil, fmt.Errorf("decoding failed: %w", err)
+		return &mv, fmt.Errorf("decoding failed: %w", err)
 	}
 	return &mv, nil
 }
