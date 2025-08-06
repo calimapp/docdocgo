@@ -12,10 +12,16 @@ go install github.com/calimapp/docdocgo@latest
 
 <https://github.com/calimapp/docdocgo/releases>
 
+### With docker
+
+```sh
+docker run -v $(pwd):/godoc -w /godoc ghcr.io/calimapp/docdocgo:latest --help
+```
+
 ## Features
 
 ### High priority
-- [ ] Dockerize CLI, with auto docker deployment to docker hub
+- [x] Dockerize CLI, with auto docker deployment to docker hub
 - [ ] Refactor app in 2 separate modules parser and render
 
 ### Low priority

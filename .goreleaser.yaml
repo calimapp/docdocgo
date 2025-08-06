@@ -22,9 +22,13 @@ builds:
       - linux
       - windows
       - darwin
+    goarch:
+      - amd64
+      - arm64
+    binary: docdocgo
 
 archives:
-  - format: tar.gz
+  - formats: ["tar.gz"]
     # this name template makes the OS and Arch compatible with the results of `uname`.
     name_template: >-
       {{ .ProjectName }}_
@@ -37,6 +41,43 @@ archives:
     format_overrides:
       - goos: windows
         format: zip
+
+docker_manifests:
+  - name_template: "ghcr.io/calimapp/docdocgo:{{ .Tag }}"
+    image_templates:
+      - "ghcr.io/calimapp/docdocgo:{{ .Tag }}-amd64"
+      - "ghcr.io/calimapp/docdocgo:{{ .Tag }}-arm64"
+  - name_template: "ghcr.io/calimapp/docdocgo:latest"
+    image_templates:
+      - "ghcr.io/calimapp/docdocgo:{{ .Tag }}-amd64"
+      - "ghcr.io/calimapp/docdocgo:{{ .Tag }}-arm64"
+
+dockers:
+  - image_templates:
+      - "ghcr.io/calimapp/docdocgo:{{ .Tag }}-amd64"
+    dockerfile: Dockerfile
+    use: buildx
+    build_flag_templates:
+      - "--pull"
+      - "--platform=linux/amd64"
+      - "--label=org.opencontainers.image.created={{.Date}}"
+      - "--label=org.opencontainers.image.title={{.ProjectName}}"
+      - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+      - "--label=org.opencontainers.image.version={{.Version}}"
+      - "--label=org.opencontainers.image.source={{.GitURL}}"
+  - image_templates:
+      - "ghcr.io/calimapp/docdocgo:{{ .Tag }}-arm64"
+    dockerfile: Dockerfile
+    use: buildx
+    build_flag_templates:
+      - "--pull"
+      - "--platform=linux/arm64"
+      - "--label=org.opencontainers.image.created={{.Date}}"
+      - "--label=org.opencontainers.image.name={{.ProjectName}}"
+      - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+      - "--label=org.opencontainers.image.version={{.Version}}"
+      - "--label=org.opencontainers.image.source={{.GitURL}}"
+    goarch: arm64
 
 changelog:
   sort: asc
