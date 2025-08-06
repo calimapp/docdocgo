@@ -12,6 +12,12 @@ go install github.com/calimapp/docdocgo@latest
 
 <https://github.com/calimapp/docdocgo/releases>
 
+### With docker
+
+```sh
+docker run -v $(pwd):/godoc -w /godoc ghcr.io/calimapp/docdocgo:latest --help
+```
+
 ## Features
 
 ### High priority

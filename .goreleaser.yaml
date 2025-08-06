@@ -55,7 +55,7 @@ docker_manifests:
 dockers:
   - image_templates:
       - "ghcr.io/calimapp/docdocgo:{{ .Tag }}-amd64"
-    dockerfile: release.Dockerfile
+    dockerfile: Dockerfile
     use: buildx
     build_flag_templates:
       - "--pull"
@@ -67,7 +67,7 @@ dockers:
       - "--label=org.opencontainers.image.source={{.GitURL}}"
   - image_templates:
       - "ghcr.io/calimapp/docdocgo:{{ .Tag }}-arm64"
-    dockerfile: release.Dockerfile
+    dockerfile: Dockerfile
     use: buildx
     build_flag_templates:
       - "--pull"
